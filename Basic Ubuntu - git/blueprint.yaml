@@ -1,0 +1,36 @@
+formatVersion: 1
+name: Basic Ubuntu with Git
+version: 1
+inputs:
+  env:
+    type: string
+    enum:
+      - 'env:dev'
+      - 'env:test'
+      - 'env:staging'
+    default: 'env:dev'
+    title: Environment
+    description: Target Environment
+  size:
+    type: string
+    enum:
+      - small
+      - medium
+    default: small
+    description: Size of Nodes
+    title: Tier Machine Size
+resources:
+  Ubuntu:
+    type: Cloud.Machine
+    properties:
+      image: ubuntu-16.04
+      flavor: '${input.size}'
+      constraints:
+        - tag: '${input.env}'
+      networks:
+        - network: '${resource.Network.id}'
+  Network:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+
